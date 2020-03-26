@@ -1,0 +1,14 @@
+pip-tools
+torch==1.4.*
+torchvision
+pytorch-lightning==0.7.*
+pandas>=1.0
+numpy
+scikit-learn
+matplotlib>=3.0
+seaborn
+jupyter
+pytest
+pre-commit
+black
+flake8
