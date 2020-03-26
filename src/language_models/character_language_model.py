@@ -7,10 +7,15 @@ from torch.utils.data import random_split, DataLoader
 
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 
+from argparse import Namespace
+
 
 class CharacterLanguageModel(pl.LightningModule):
-    def __init__(self, vocab_size: int):
+    def __init__(self, hparams):
         super(CharacterLanguageModel, self).__init__()
+
+        self.hparams = hparams
+        vocab_size = hparams.vocab_size
 
         self.embed = nn.Embedding.from_pretrained(torch.eye(vocab_size, vocab_size))
         self.rnn = nn.GRU(input_size=vocab_size, hidden_size=64, batch_first=True)
@@ -54,6 +59,9 @@ class CharacterLanguageModel(pl.LightningModule):
     def configure_optimizer(self):
         return optim.Adam(self.parameters())
 
+    def on_save_checkpoint(self, checkpoint):
+        return super().on_save_checkpoint(checkpoint)
+
 
 if __name__ == '__main__':
     vocab = CharacterVocabulary()
@@ -65,7 +73,10 @@ if __name__ == '__main__':
     train_loader = DataLoader(train_dset, batch_size=1, shuffle=True)
     val_loader = DataLoader(val_dset, batch_size=1, shuffle=False)
 
-    model = CharacterLanguageModel(vocab.get_vocab_size())
+    n = Namespace()
+    n.vocab_size = vocab.get_vocab_size()
+
+    model = CharacterLanguageModel(n)
 
     trainer = pl.Trainer(
         gradient_clip=1.0,
