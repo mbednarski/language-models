@@ -7,7 +7,7 @@ from torch.testing import assert_allclose
 def test_encode():
     vocab = CharacterVocabulary()
 
-    text = "trex"
+    text = 'trex'
     encoded = vocab.encode(text)
 
     assert encoded.shape == (4,)
@@ -17,7 +17,7 @@ def test_encode():
 def test_encode_special():
     vocab = CharacterVocabulary()
 
-    text = "trex"
+    text = 'trex'
     encoded = vocab.encode(text, include_special_tokens=True)
 
     assert encoded.shape == (6,)
@@ -30,7 +30,7 @@ def test_decode():
     encoded = torch.LongTensor([0, 21, 19, 6, 25, 1])
     decoded = vocab.decode(encoded)
 
-    assert vocab.SOS_TOKEN + "trex" + vocab.EOS_TOKEN == decoded
+    assert vocab.SOS_TOKEN + 'trex' + vocab.EOS_TOKEN == decoded
 
 
 def test_dataset():
