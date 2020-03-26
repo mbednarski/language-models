@@ -4,12 +4,12 @@ from pathlib import Path
 
 
 class CharacterVocabulary:
-    SOS_TOKEN = "^"
-    EOS_TOKEN = "$"
+    SOS_TOKEN = '^'
+    EOS_TOKEN = '$'
 
     def __init__(self):
         self.idx2char = list(
-            self.SOS_TOKEN + self.EOS_TOKEN + "abcdefghijklmnopqrstuvwxyz"
+            self.SOS_TOKEN + self.EOS_TOKEN + 'abcdefghijklmnopqrstuvwxyz_'
         )
         self.char2idx = {c: i for i, c in enumerate(self.idx2char)}
 
@@ -27,7 +27,7 @@ class CharacterVocabulary:
 
     def decode(self, t: torch.LongTensor) -> str:
         decoded = [self.idx2char[i] for i in t]
-        return "".join(decoded)
+        return ''.join(decoded)
 
 
 class WordDataset(Dataset):
@@ -38,12 +38,12 @@ class WordDataset(Dataset):
             self.vocab = vocab
 
         if dset_path is None:
-            dset_path = Path("data/raw/dinosaurs.txt")
+            dset_path = Path('data/raw/dinosaurs.txt')
         else:
             dset_path = dset_path
 
         lines = []
-        with dset_path.open("rt") as f:
+        with dset_path.open('rt') as f:
             lines = [l.strip() for l in f.readlines()]
         self.lines = [l for l in lines if len(l) > 0]
 
