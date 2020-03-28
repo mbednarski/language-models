@@ -2,7 +2,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import pytorch_lightning as pl
-from language_models.dataset.dinosaurs import WordDataset, CharacterVocabulary
+from language_models.dataset.word import WordDataset
+from language_models.vocabulary import CharacterVocabulary
 from torch.utils.data import random_split, DataLoader
 
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
@@ -23,17 +24,17 @@ class CharacterLanguageModel(pl.LightningModule):
 
         self.criterion = nn.CrossEntropyLoss()
 
-    def forward(self, x):
+    def forward(self, x, hidden_state=None):
         e = self.embed(x)
-        out, _ = self.rnn(e)
+        out, hidden = self.rnn(e, hidden_state)
         y = self.fc(out)
 
-        return y
+        return y, hidden
 
     def training_step(self, batch, batch_idx):
         x, y = batch
 
-        output = self.forward(x)
+        output, _ = self.forward(x)
         output = output.transpose(1, 2)
         loss = self.criterion(output, y)
 
@@ -43,7 +44,7 @@ class CharacterLanguageModel(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         x, y = batch
 
-        output = self.forward(x)
+        output, _ = self.forward(x)
         output = output.transpose(1, 2)
         loss = self.criterion(output, y)
 
@@ -82,8 +83,9 @@ if __name__ == '__main__':
         gradient_clip=1.0,
         accumulate_grad_batches=16,
         overfit_pct=0.1,
+        max_epochs=101,
         early_stop_callback=EarlyStopping(
-            monitor='val_loss', strict=True, verbose=True
+            monitor='val_loss', strict=True, verbose=True, patience=10
         ),
         checkpoint_callback=ModelCheckpoint('models/{epoch}', verbose=True),
     )

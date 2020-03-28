@@ -1,4 +1,5 @@
-from language_models.dataset.dinosaurs import CharacterVocabulary, WordDataset
+from language_models.dataset.word import WordDataset
+from language_models.vocabulary import CharacterVocabulary
 
 import torch
 from torch.testing import assert_allclose
