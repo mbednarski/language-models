@@ -13,3 +13,4 @@ pre-commit
 black
 flake8
 streamlit
+tokenizers
