@@ -1,4 +1,7 @@
 .vscode
+lightning_logs
+models
+nohup.out
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
