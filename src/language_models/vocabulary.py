@@ -2,12 +2,15 @@ import torch
 
 
 class CharacterVocabulary:
-    SOS_TOKEN = '^'
-    EOS_TOKEN = '$'
+    SOS_TOKEN = '<s>'
+    EOS_TOKEN = '<s/>'
+    PAD_TOKEN = '<pad>'
+
+    ALLOWED_TOKENS = list('abcdefghijklmnopqrstuvwxyz_')
 
     def __init__(self):
         self.idx2char = list(
-            self.SOS_TOKEN + self.EOS_TOKEN + 'abcdefghijklmnopqrstuvwxyz_'
+            self.PAD_TOKEN + self.SOS_TOKEN + self.EOS_TOKEN + self.ALLOWED_TOKENS
         )
         self.char2idx = {c: i for i, c in enumerate(self.idx2char)}
 
@@ -19,7 +22,7 @@ class CharacterVocabulary:
 
     def encode(self, s: str, include_special_tokens=False) -> torch.LongTensor:
         if include_special_tokens:
-            s = self.SOS_TOKEN + s + self.EOS_TOKEN
+            s = [self.SOS_TOKEN] + list(s) + [self.EOS_TOKEN]
         values = [self.char2idx[c] for c in s]
         return torch.LongTensor(values)
 
