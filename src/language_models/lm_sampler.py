@@ -2,24 +2,24 @@ import torch
 import pytorch_lightning as pl
 
 from language_models.character_language_model import CharacterLanguageModel
-from language_models.vocabulary import CharacterVocabulary
+from language_models.tokenizer import FixedTokenizer
 
 
 class LanguageModelSampler:
     def __init__(
-        self, model: pl.LightningModule, vocab: CharacterVocabulary, strategy: str
+        self, model: pl.LightningModule, tokenizer: FixedTokenizer, strategy: str
     ):
         self.model = model
-        self.vocab = vocab
+        self.tokenizer = tokenizer
 
         self.strategy = strategy
 
     def sample_sentence(self, max_len: int = 20, seed: str = '', strategy='greedy'):
-
-        if strategy not in {'greedy'}:
+        seed = list(seed)
+        if strategy not in {'greedy', 'proba'}:
             raise ValueError()
-        input = self.vocab.encode(
-            self.vocab.SOS_TOKEN + seed, include_special_tokens=False
+        input = self.tokenizer.encode(
+            [self.tokenizer.SOS_TOKEN] + seed, include_special_tokens=False
         )
         input = input.unsqueeze(0)
 
@@ -36,13 +36,18 @@ class LanguageModelSampler:
                 output = output[0, -1, :].squeeze()
                 probas = torch.softmax(output, dim=0)
 
-                # sampled_idx = torch.multinomial(probas, 1).squeeze()
+                probas.rename_(None)
 
-                sampled_idx = torch.argmax(probas)
+                if strategy == 'proba':
+                    sampled_idx = torch.multinomial(probas, 1).squeeze()
+                elif strategy == 'greedy':
+                    sampled_idx = torch.argmax(probas)
+                else:
+                    assert False
 
-                sampled_char = self.vocab.decode(sampled_idx.unsqueeze(0))
+                sampled_char = self.tokenizer.decode(sampled_idx.unsqueeze(0))
 
-                if sampled_char == self.vocab.EOS_TOKEN:
+                if sampled_char == self.tokenizer.EOS_TOKEN:
                     break
 
                 sampled_sentence += sampled_char

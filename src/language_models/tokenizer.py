@@ -1,6 +1,7 @@
 import torch
 from torch.nn.utils.rnn import pad_sequence
 
+
 class FixedTokenizer:
     SOS_TOKEN = '<s>'
     EOS_TOKEN = '<s/>'
@@ -41,10 +42,14 @@ class FixedTokenizer:
         x = list(x)
         y = list(y)
 
-        x = pad_sequence(x, padding_value=self.tok2idx[self.PAD_TOKEN])
-        y = pad_sequence(y, padding_value=self.tok2idx[self.PAD_TOKEN])
+        x = pad_sequence(
+            x, batch_first=True, padding_value=self.tok2idx[self.PAD_TOKEN]
+        )
+        y = pad_sequence(
+            y, batch_first=True, padding_value=self.tok2idx[self.PAD_TOKEN]
+        )
 
-        x.rename_('L', 'B')
-        y.rename_('L', 'B')
+        x.rename_('B', 'L')
+        y.rename_('B', 'L')
 
         return x, y

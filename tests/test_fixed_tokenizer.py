@@ -12,8 +12,9 @@ def test_defaults():
     assert 1 == tok.tok2idx[tok.SOS_TOKEN]
     assert 2 == tok.tok2idx[tok.EOS_TOKEN]
 
+
 @given(text(alphabet=FixedTokenizer.DEFAULT_ALLOWED_TOKENS))
-def test_encode_decode(s:str):
+def test_encode_decode(s: str):
     assume(len(s) > 0)
     tok = FixedTokenizer()
 
@@ -22,8 +23,9 @@ def test_encode_decode(s:str):
 
     assert decoded == s
 
+
 @given(text(alphabet=FixedTokenizer.DEFAULT_ALLOWED_TOKENS))
-def test_encode_decode_with_special(s:str):
+def test_encode_decode_with_special(s: str):
     tok = FixedTokenizer()
 
     encoded = tok.encode(s, include_special_tokens=True)
