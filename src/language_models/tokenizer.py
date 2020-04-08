@@ -6,11 +6,16 @@ class FixedTokenizer:
     EOS_TOKEN = '<s/>'
     PAD_TOKEN = '<pad>'
 
-    ALLOWED_TOKENS = list('abcdefghijklmnopqrstuvwxyz_')
+    DEFAULT_ALLOWED_TOKENS = list('abcdefghijklmnopqrstuvwxyz_')
 
-    def __init__(self):
+    def __init__(self, allowed_tokens=None):
+        if allowed_tokens is None:
+            self.allowed_tokens = self.DEFAULT_ALLOWED_TOKENS
+        else:
+            self.allowed_tokens = allowed_tokens
+
         self.idx2tok = list(
-            [self.PAD_TOKEN, self.SOS_TOKEN, self.EOS_TOKEN] + self.ALLOWED_TOKENS
+            [self.PAD_TOKEN, self.SOS_TOKEN, self.EOS_TOKEN] + self.allowed_tokens
         )
         self.tok2idx = {t: i for i, t in enumerate(self.idx2tok)}
 

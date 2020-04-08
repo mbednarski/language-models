@@ -4,7 +4,6 @@ import torch.optim as optim
 import pytorch_lightning as pl
 import torch.nn.utils.rnn as ru
 from language_models.dataset.word import WordDataset
-from language_models.vocabulary import CharacterVocabulary
 from torch.utils.data import random_split, DataLoader
 
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
@@ -54,6 +53,7 @@ class CharacterLanguageModel(pl.LightningModule):
 
         loss = self.criterion(output, y)
 
+        probas.rename_(None)
         log_perp = 0
         for seq_id in range(output.shape[2]):
             y_squeezed = y.squeeze()
