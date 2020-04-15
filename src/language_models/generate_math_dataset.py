@@ -44,15 +44,15 @@ class EquationGenerator:
 
 @click.command()
 @click.option('-n', default=20_000)
-@click.option('-o', default='data/raw/equations.jsonl')
+@click.option('-o', default='data/raw/equations.csv')
 def main(n, o):
     gen = EquationGenerator()
     equations = []
     for _ in trange(n):
         equations.append(gen.generate_equation())
 
-    df = pd.DataFrame(equations, columns={'numerical', 'textual'})
-    df.to_json(o, orient='records', lines=True)
+    df = pd.DataFrame(equations, columns=('numerical', 'textual'))
+    df.to_csv(o, index=False, sep=';')
 
 
 if __name__ == '__main__':

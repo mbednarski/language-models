@@ -15,3 +15,5 @@ flake8
 streamlit
 tokenizers
 hypothesis
+inflect
+isort[requirements]
