@@ -43,7 +43,7 @@ class EquationGenerator:
 
 
 @click.command()
-@click.option('-n', default=20_000)
+@click.option('-n', default=1_000)
 @click.option('-o', default='data/raw/equations.csv')
 def main(n, o):
     gen = EquationGenerator()
