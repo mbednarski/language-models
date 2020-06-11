@@ -17,3 +17,4 @@ tokenizers
 hypothesis
 inflect
 isort[requirements]
+jupyterlab
