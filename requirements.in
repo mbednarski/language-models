@@ -19,3 +19,5 @@ isort[requirements]
 jupyterlab
 spacy
 whatthelang
+tokenizers
+clean-text
