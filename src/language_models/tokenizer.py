@@ -3,9 +3,9 @@ from torch.nn.utils.rnn import pad_sequence
 
 
 class FixedTokenizer:
-    SOS_TOKEN = '<s>'
-    EOS_TOKEN = '<s/>'
-    PAD_TOKEN = '<pad>'
+    SOS_TOKEN = '!'
+    EOS_TOKEN = '@'
+    PAD_TOKEN = '#'
 
     DEFAULT_ALLOWED_TOKENS = list('abcdefghijklmnopqrstuvwxyz_')
 
