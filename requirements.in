@@ -1,7 +1,6 @@
 pip-tools
-torch==1.4.*
-torchvision
-pytorch-lightning==0.7.*
+torch==1.5.*
+pytorch-lightning==0.7.6
 pandas>=1.0
 numpy
 scikit-learn
@@ -13,3 +12,12 @@ pre-commit
 black
 flake8
 streamlit
+tokenizers
+hypothesis
+inflect
+isort[requirements]
+jupyterlab
+spacy
+whatthelang
+tokenizers
+clean-text

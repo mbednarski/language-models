@@ -1,15 +1,15 @@
 import torch
 from torch.utils.data import Dataset
 from pathlib import Path
-from language_models.vocabulary import CharacterVocabulary
+from language_models.tokenizer import FixedTokenizer
 
 
 class WordDataset(Dataset):
-    def __init__(self, vocab=None, dset_path: Path = None):
-        if vocab is None:
-            self.vocab = CharacterVocabulary()
+    def __init__(self, tokenizer=None, dset_path: Path = None):
+        if tokenizer is None:
+            self.tokenizer = FixedTokenizer()
         else:
-            self.vocab = vocab
+            self.tokenizer = tokenizer
 
         if dset_path is None:
             dset_path = Path('data/raw/dinosaurs.txt')
@@ -28,7 +28,7 @@ class WordDataset(Dataset):
         x = self.lines[idx]
         y = self.lines[idx]
 
-        x = self.vocab.encode(x, include_special_tokens=True)[:-1]
-        y = self.vocab.encode(y, include_special_tokens=True)[1:]
+        x = self.tokenizer.encode(x, include_special_tokens=True)[:-1]
+        y = self.tokenizer.encode(y, include_special_tokens=True)[1:]
 
         return x, y
